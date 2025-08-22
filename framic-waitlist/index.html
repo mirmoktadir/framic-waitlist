@@ -1,0 +1,57 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Framic – Join the Waitlist</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Dark Mode Toggle -->
+    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+      🌞
+    </button>
+
+    <!-- Landing Section -->
+    <main class="landing">
+      <div class="text-content">
+        <img src="assets/logo.png" alt="Framic Logo" class="logo" />
+        <h1>Meet Framic.</h1>
+        <p class="subtext">
+          The future of visual storytelling is here.  
+          <strong id="userCount">1,042 people</strong> are already waiting.
+        </p>
+
+        <!-- Waitlist Form -->
+        <form id="waitlistForm" class="form">
+          <div class="input-group">
+            <input type="text" id="name" placeholder="Name (optional)" />
+          </div>
+          <div class="input-group">
+            <input type="email" id="email" placeholder="Email address" required />
+            <div class="error" id="emailError"></div>
+          </div>
+          <button type="submit" class="btn cta">
+            <span class="text">Join the Waitlist</span>
+            <span class="loading" style="display:none;">Sending...</span>
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Success Screen -->
+    <section id="successScreen" class="success-screen" style="display:none;">
+      <h2>You're In!</h2>
+      <p>We've added you to the waitlist. A confirmation email is on its way.</p>
+      <button id="backButton" class="btn">Back to Home</button>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

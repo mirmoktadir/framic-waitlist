@@ -13,69 +13,130 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
+/* Custom Properties */
 :root {
   --bg: #f8f9fa;
   --text: #1a1a1a;
   --accent: #6c5ce7;
-  --input-bg: #fff;
   --border: #ddd;
   --shadow: rgba(0, 0, 0, 0.1);
+  --section-bg: #000;
+  --section-text: white;
 }
 
 [data-theme="dark"] {
   --bg: #121212;
   --text: #f0f0f0;
   --accent: #a29bfe;
-  --input-bg: #2d2d2d;
   --border: #444;
   --shadow: rgba(0, 0, 0, 0.3);
+  --section-bg: #121212;
+  --section-text: white;
 }
 
-.container {
+/* Hero Section (only place with collage background) */
+.hero-section {
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  max-width: 500px;
-  margin: 0 auto;
-  position: relative;
+  overflow: hidden;
+  padding: 0;
 }
 
-/* Dark Mode Toggle */
-.dark-mode-toggle {
+/* Hero Collage Background */
+.hero-collage {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  filter: blur(2px);
+  opacity: 0.6;
+  background-color: #000;
+  animation: scrollLeft 30s linear infinite;
 }
 
-/* Logo & Text */
+.collage-track {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 200%;
+  height: 100%;
+}
+
+.collage-img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  opacity: 0.7;
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+/* Optional: Add visual variation */
+.collage-img:nth-child(2n) {
+  margin-top: 10px;
+}
+.collage-img:nth-child(3n) {
+  margin-bottom: 15px;
+}
+
+/* Responsive for collage */
+@media (max-width: 768px) {
+  .collage-img {
+    width: 200px;
+    height: 200px;
+  }
+  .collage-track {
+    gap: 10px;
+  }
+  .hero-collage {
+    animation-duration: 40s;
+  }
+}
+
+/* Overlay Content (Centered Card) */
+.overlay-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+  max-width: 500px;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Logo */
 .logo {
   height: 50px;
   margin-bottom: 1rem;
+  filter: brightness(1.2);
 }
 
+/* Headings & Text */
 h1 {
-  font-size: 2.2rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .subtext {
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: white;
   margin-bottom: 2rem;
-  text-align: center;
-}
-
-.text-content {
-  width: 100%;
+  opacity: 0.9;
 }
 
 /* Form */
@@ -95,8 +156,8 @@ input {
   border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 1rem;
-  background-color: var(--input-bg);
-  color: var(--text);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
   transition: border 0.2s;
 }
 
@@ -113,7 +174,7 @@ input:focus {
   display: none;
 }
 
-/* CTA Button */
+/* Button */
 .btn {
   padding: 1rem 1.5rem;
   background-color: var(--accent);
@@ -134,11 +195,7 @@ input:focus {
   opacity: 0.9;
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
+/* Loading state */
 .loading {
   display: none;
 }
@@ -155,23 +212,192 @@ input:focus {
   margin-bottom: 1rem;
 }
 
+/* How It Works Section */
+.how-it-works {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 3rem 2rem;
+  text-align: center;
+  background-color: var(--section-bg);
+  color: var(--section-text);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.how-it-works h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: #6c5ce7;
+}
+
+.how-it-works .subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.8rem 1.5rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.step:hover {
+  transform: translateY(-6px);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: #6c5ce7;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.step h3 {
+  font-size: 1.45rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.step p {
+  font-size: 1rem;
+  color: #ddd;
+  opacity: 0.9;
+}
+
+/* CTA Bottom */
+.cta-bottom {
+  text-align: center;
+}
+
+.cta-bottom p {
+  font-size: 1.25rem;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+  color: white;
+}
+
 /* Animations */
+/* @keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+} */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive */
-@media (max-width: 480px) {
-  h1 {
-    font-size: 1.8rem;
+@media (max-width: 768px) {
+  .how-it-works {
+    margin: 3rem 1.5rem;
+    padding: 2.5rem 1.5rem;
+    border-radius: 12px;
   }
 
-  .subtext {
-    font-size: 1rem;
+  .step {
+    padding: 1.4rem 1.2rem;
   }
 
-  .btn {
-    padding: 0.9rem 1.2rem;
+  .step h3 {
+    font-size: 1.25rem;
   }
+
+  .step p {
+    font-size: 0.95rem;
+  }
+
+  .cta-bottom p {
+    font-size: 1.1rem;
+  }
+}
+/* Theme Toggle Button */
+.theme-toggle {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Sun & Moon Icons */
+.toggle-icon {
+  position: relative;
+  width: 22px;
+  height: 22px;
+}
+
+.icon-sun,
+.icon-moon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  stroke: white;
+}
+
+/* Default: Sun visible in light mode */
+[data-theme="dark"] .icon-sun {
+  opacity: 0;
+}
+[data-theme="dark"] .icon-moon {
+  opacity: 1;
+}
+
+/* Light mode: Sun visible */
+.theme-toggle:not([data-theme='dark']) .icon-sun,
+:root:not([data-theme='dark']) ~ body .icon-sun {
+  opacity: 1;
 }

@@ -9,22 +9,22 @@ const successScreen = document.getElementById('successScreen');
 const backButton = document.getElementById('backButton');
 const userCountEl = document.getElementById('userCount');
 const darkModeToggle = document.getElementById('darkModeToggle');
+const scrollToFormBtn = document.getElementById('scrollToForm');
 
-// API Base URL (Mock or Real)
-const API_BASE = 'https://api.framic.dev';
-let userCount = 1042; // Fallback
+// API Base URL (Trimmed)
+const API_BASE = 'https://api.framic.dev'; // Removed extra spaces
+let userCount = 1042; // Fallback count
 
+// ====== DARK MODE TOGGLE ======
 // Dark Mode
 const setDarkMode = (isDark) => {
   if (isDark) {
     document.documentElement.setAttribute('data-theme', 'dark');
-    darkModeToggle.textContent = '🌙';
-    localStorage.setItem('darkMode', 'enabled');
+    // No need to change text — SVG handles it
   } else {
     document.documentElement.removeAttribute('data-theme');
-    darkModeToggle.textContent = '🌞';
-    localStorage.setItem('darkMode', 'disabled');
   }
+  localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
 };
 
 // Toggle dark mode
@@ -33,23 +33,39 @@ darkModeToggle.addEventListener('click', () => {
   setDarkMode(isDark);
 });
 
-// Check saved preference
+// Check saved preference or system preference
 if (localStorage.getItem('darkMode') === 'enabled') {
   setDarkMode(true);
+} else if (localStorage.getItem('darkMode') === 'disabled') {
+  setDarkMode(false);
+} else {
+  // Respect OS preference if not set
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setDarkMode(prefersDark);
 }
 
-// Validation
+// ====== SCROLL TO HERO SECTION ======
+if (scrollToFormBtn) {
+  scrollToFormBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.hero-section').scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// ====== EMAIL VALIDATION ======
 const isValidEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
 };
 
-// Update UI with count
+// ====== UPDATE USER COUNT UI ======
 const updateUserCount = (count) => {
-  userCountEl.textContent = `${count.toLocaleString()} people`;
+  if (userCountEl) {
+    userCountEl.textContent = `${count.toLocaleString()} people`;
+  }
 };
 
-// Fetch user count
+// ====== FETCH USER COUNT FROM API ======
 const fetchUserCount = async () => {
   try {
     const res = await axios.get(`${API_BASE}/users/count`, { timeout: 5000 });
@@ -58,16 +74,19 @@ const fetchUserCount = async () => {
       updateUserCount(userCount);
     }
   } catch (err) {
-    console.warn('Using fallback count (API unreachable)');
+    console.warn('API unreachable – using fallback count', err.message);
     updateUserCount(userCount);
   }
 };
 
-// On load
-fetchUserCount();
-setInterval(fetchUserCount, 10000); // Refresh every 10s
+// ====== INITIALIZE ON LOAD ======
+if (userCountEl) {
+  updateUserCount(userCount); // Show initial fallback
+  fetchUserCount(); // Try to fetch real count
+  setInterval(fetchUserCount, 10000); // Refresh every 10s
+}
 
-// Form Submit
+// ====== FORM SUBMISSION ======
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   emailError.style.display = 'none';
@@ -81,20 +100,22 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  // Disable & show loading
+  // Disable inputs & show loading
   ctaText.style.display = 'none';
   ctaLoading.style.display = 'inline';
-  form.querySelectorAll('input').forEach(i => i.disabled = true);
+  form.querySelectorAll('input').forEach(input => {
+    input.disabled = true;
+  });
 
-  // Simulate API call or POST
   try {
+    // Attempt real API call
     await axios.post(`${API_BASE}/signup`, { email, name }, { timeout: 5000 });
     userCount++;
     updateUserCount(userCount);
     showSuccess();
   } catch (err) {
-    // Mock success after failure (UX)
-    console.warn('API failed – using mock success');
+    // Fallback: simulate success after delay (UX)
+    console.warn('Signup failed – using mock success for UX', err.message);
     setTimeout(() => {
       userCount++;
       updateUserCount(userCount);
@@ -103,16 +124,21 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
+// ====== SHOW SUCCESS SCREEN ======
 function showSuccess() {
   ctaText.style.display = 'inline';
   ctaLoading.style.display = 'none';
-  document.querySelector('.landing').style.display = 'none';
+  document.querySelector('.hero-section').style.display = 'none';
   successScreen.style.display = 'block';
 }
 
+// ====== BACK TO FORM ======
 backButton.addEventListener('click', () => {
   successScreen.style.display = 'none';
-  document.querySelector('.landing').style.display = 'flex';
+  document.querySelector('.hero-section').style.display = 'flex';
   form.reset();
-  form.querySelectorAll('input').forEach(i => i.disabled = false);
+  form.querySelectorAll('input').forEach(input => {
+    input.disabled = false;
+  });
 });
+

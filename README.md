@@ -24,7 +24,6 @@ Inspired by [4some.social](https://4some.social), this site balances **emotion, 
 | Feature | Status |
 |-------|--------|
 | **Responsive Design** | ✅ Mobile-first, works on all devices |
-| **Animated Background** | ✅ Auto-scrolling collage of 10 user images (seamless loop) |
 | **Waitlist Form** | ✅ Email (required), Name (optional) |
 | **Client-Side Validation** | ✅ Real-time email validation |
 | **Success State** | ✅ Inline success screen after submission |
@@ -55,3 +54,4 @@ No frameworks — just clean, semantic code.
 ```bash
 git clone https://github.com/mirmoktadir/framic-waitlist
 cd framic-waitlist
+
